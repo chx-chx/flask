@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from werkzeug.routing import BaseConverter
 
 app = Flask(__name__)
@@ -23,3 +23,20 @@ app.url_map.converters['mobile'] = MobileConverter
 def send_sms_code(mob_num):
     print(type(mob_num))
     return 'send sms code to {}'.format(mob_num)
+
+
+# /articles?channel_id=123
+@app.route('/articles')
+def get_articles():
+    channel_id = request.args.get('channel_id')
+    return 'you wanna get articles of channel {}'.format(channel_id)
+
+
+# 上传图片
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    f = request.files['pic']
+    # with open('./demo.png', 'wb') as new_file:
+    #     new_file.write(f.read())
+    f.save('./demo.png')
+    return 'ok'
